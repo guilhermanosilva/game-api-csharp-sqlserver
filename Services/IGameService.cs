@@ -6,7 +6,7 @@ using game.api.Models.ViewModel;
 
 namespace game.api.Services
 {
-    public interface IGameService
+    public interface IGameService : IDisposable
     {
         Task<List<GameViewModel>> GetGame(int page, int amount);
         Task<GameViewModel> GetGame(Guid id);
