@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using game.api.Entities;
+using game.api.Exceptions;
 using game.api.Models.InputModel;
 using game.api.Models.ViewModel;
 using game.api.Repositories;
@@ -16,7 +17,6 @@ namespace game.api.Services
         {
             _gameRepository = gameRepository;
         }
-
         public async Task<List<GameViewModel>> GetGame(int page, int amount)
         {
             var games = await _gameRepository.GetGame(page, amount);
@@ -27,7 +27,8 @@ namespace game.api.Services
                 Name = game.Name,
                 Price = game.Price,
                 Producer = game.Producer
-            }).ToList();
+            })
+            .ToList();
         }
 
         public async Task<GameViewModel> GetGame(Guid id)
@@ -35,7 +36,7 @@ namespace game.api.Services
             var game = await _gameRepository.GetGame(id);
 
             if (game == null)
-                return null;
+                throw new GameNotRegistered();
 
             return new GameViewModel
             {
@@ -51,7 +52,7 @@ namespace game.api.Services
             var game = await _gameRepository.GetGame(inputGame.Name, inputGame.Producer);
 
             if (game.Count() > 0)
-                return null;
+                throw new GameAlreadyRegistered();
 
             var gameInsert = new Game
             {
@@ -71,27 +72,27 @@ namespace game.api.Services
                 Producer = gameInsert.Producer
             };
         }
-  
+
         public async Task UpdateGame(Guid id, GameInputModel inputGame)
         {
             var game = await _gameRepository.GetGame(id);
 
-            if(game == null)
-                throw new Exception();
-            
+            if (game == null)
+                throw new GameNotRegistered();
+
             game.Name = inputGame.Name;
             game.Price = inputGame.Price;
             game.Producer = inputGame.Producer;
 
             await _gameRepository.UpdateGame(game);
         }
- 
+
         public async Task DeleteGame(Guid id)
         {
             var game = await _gameRepository.GetGame(id);
 
             if (game == null)
-                throw new Exception();
+                throw new GameNotRegistered();
 
             await _gameRepository.DeleteGame(id);
         }

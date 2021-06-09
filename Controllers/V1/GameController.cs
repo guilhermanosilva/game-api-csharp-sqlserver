@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using game.api.Exceptions;
 using game.api.Models.InputModel;
 using game.api.Models.ViewModel;
 using game.api.Services;
@@ -52,7 +53,7 @@ namespace game.api.Controllers
                 var gameResult = await _gameService.InsertGame(game);
                 return Ok(gameResult);
             }
-            catch (System.Exception)
+            catch (GameAlreadyRegistered)
             {
                 return UnprocessableEntity("There is already a game with this name for this producer");
             }
@@ -66,7 +67,7 @@ namespace game.api.Controllers
                 await _gameService.UpdateGame(idGame, game);
                 return Ok();
             }
-            catch (System.Exception)
+            catch (GameNotRegistered)
             {
                 return NotFound("Game not found to update");
             }
@@ -80,7 +81,7 @@ namespace game.api.Controllers
                 await _gameService.DeleteGame(idGame);
                 return Ok();
             }
-            catch (System.Exception)
+            catch (GameNotRegistered)
             {
                 return NotFound("Game not found to delete");
             }
