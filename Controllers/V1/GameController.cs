@@ -1,8 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Threading.Tasks;
 using game.api.Models.InputModel;
 using game.api.Models.ViewModel;
+using game.api.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace game.api.Controllers
@@ -12,35 +15,75 @@ namespace game.api.Controllers
 
     public class GameController : ControllerBase
     {
-        [HttpGet]
-        public async Task<ActionResult<List<GameViewModel>>> GetGame()
+        private readonly IGameService _gameService;
+
+        public GameController(IGameService gameService)
         {
-            return Ok();
+            _gameService = gameService;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<GameViewModel>>> GetGame([FromQuery, Range(1, int.MaxValue)] int page = 1, [FromQuery, Range(1, 50)] int amount = 5)
+        {
+            var games = await _gameService.GetGame(page, amount);
+
+            if (games.Count() == 0)
+                return NoContent();
+
+            return Ok(games);
         }
 
         [HttpGet("{idGame:guid}")]
-        public async Task<ActionResult<GameViewModel>> GetGame(Guid idGame)
+        public async Task<ActionResult<GameViewModel>> GetGame([FromRoute] Guid idGame)
         {
-            return Ok();
-        }
+            var game = await _gameService.GetGame(idGame);
 
+            if (game == null)
+                return NoContent();
+
+            return Ok(game);
+        }
 
         [HttpPost]
-        public async Task<ActionResult<GameViewModel>> PostGame(GameInputModel game)
+        public async Task<ActionResult<GameViewModel>> PostGame([FromBody] GameInputModel game)
         {
-            return Ok();
+            try
+            {
+                var gameResult = await _gameService.InsertGame(game);
+                return Ok(gameResult);
+            }
+            catch (System.Exception)
+            {
+                return UnprocessableEntity("There is already a game with this name for this producer");
+            }
         }
 
-        [HttpPut("idJogo:guid")]
-        public async Task<ActionResult> UpdateGame(Guid idJogo, GameInputModel game)
+        [HttpPut("idGame:guid")]
+        public async Task<ActionResult> UpdateGame(Guid idGame, GameInputModel game)
         {
-            return Ok();
+            try
+            {
+                await _gameService.UpdateGame(idGame, game);
+                return Ok();
+            }
+            catch (System.Exception)
+            {
+                return NotFound("Game not found to update");
+            }
         }
 
-        [HttpDelete("idJogo:guid")]
-        public async Task<ActionResult> DeleteGame(Guid idJogo)
+        [HttpDelete("idGame:guid")]
+        public async Task<ActionResult> DeleteGame(Guid idGame)
         {
-            return Ok();
+            try
+            {
+                await _gameService.DeleteGame(idGame);
+                return Ok();
+            }
+            catch (System.Exception)
+            {
+                return NotFound("Game not found to delete");
+            }
         }
     }
 }
