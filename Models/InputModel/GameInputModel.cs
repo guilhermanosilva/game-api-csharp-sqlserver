@@ -12,6 +12,6 @@ namespace game.api.Models.InputModel
         public string Producer { get; set; }
         [Required]
         [Range(1, 1000, ErrorMessage = "The price must be at least BRL 1 and maximum BRL 1000")]
-        public double Price { get; set; }
+        public decimal Price { get; set; }
     }
 }

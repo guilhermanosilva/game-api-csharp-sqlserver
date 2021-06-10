@@ -1,3 +1,5 @@
+using game.api.Repositories;
+using game.api.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -18,6 +20,9 @@ namespace game.api
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<IGameService, GameService>();
+            services.AddScoped<IGameRepository, GameRepositorySQL>();
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
