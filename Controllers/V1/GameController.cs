@@ -86,6 +86,7 @@ namespace game.api.Controllers
         /// <summary>Update a game</summary>
         /// <remarks>Enter the ID of the game to be updated and the game data</remarks>
         /// <param name="idGame">Game ID to be updated</param>
+        /// <param name="game">Updated data game</param>
         /// <response code="200">successfully updated</response>
         /// <response code="400">Game not found to update</response>
         [HttpPut("idGame:guid")]

@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Reflection;
+using game.api.Middleware;
 using game.api.Repositories;
 using game.api.Services;
 using Microsoft.AspNetCore.Builder;
@@ -29,9 +30,9 @@ namespace game.api
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo 
-                { 
-                    Title = "game.api", 
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "game.api",
                     Version = "v1",
                     Description = "A simple example ASP.NET Core Web Game API",
                     Contact = new OpenApiContact
@@ -39,7 +40,7 @@ namespace game.api
                         Name = "Guilhermano Silva",
                         Email = "guilhermanodev@gmail.com",
                         Url = new Uri("https://linkedin.com/in/guilhermanosilva"),
-                    }, 
+                    },
                 });
 
                 var basePath = AppDomain.CurrentDomain.BaseDirectory;
@@ -54,12 +55,14 @@ namespace game.api
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => 
+                app.UseSwaggerUI(c =>
                 {
                     c.SwaggerEndpoint("/swagger/v1/swagger.json", "game.api v1");
                     c.RoutePrefix = string.Empty;
                 });
             }
+
+            app.UseMiddleware<ExceptionMiddleware>();
 
             app.UseHttpsRedirection();
 
