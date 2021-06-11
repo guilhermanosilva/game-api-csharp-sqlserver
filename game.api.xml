@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>game.api</name>
+    </assembly>
+    <members>
+        <member name="M:game.api.Controllers.GameController.GetGame(System.Int32,System.Int32)">
+            <summary>
+            Search all games paged
+            </summary>
+            <remarks>
+            It's not possible to return without paging
+            </remarks>
+            <param name="page">Page being consulted, Minimum 1</param>
+            <param name="amount">Number of records per page</param>
+            <response code="200">Return a list of games</response>
+            <response code="400">If there are no games</response>
+        </member>
+        <member name="M:game.api.Controllers.GameController.GetGame(System.Guid)">
+            <summary>
+            Search game by id
+            </summary>
+            <remarks>
+            It's not possible to return without id
+            </remarks>
+            <param name="idGame">Specifc id of a game</param>
+            <response code="200">Return a specific game</response>
+            <response code="400">If there are no game fot informed id</response>
+        </member>
+        <member name="M:game.api.Controllers.GameController.PostGame(game.api.Models.InputModel.GameInputModel)">
+            <summary>Insert a new game</summary>
+            <remarks>Enter all data for a new game</remarks>
+            <param name="game">JSON object containing the new data</param>
+            <response code="200">Returns the new game inserted</response>
+            <response code="400">If it was not possible to insert the new game</response>
+        </member>
+        <member name="M:game.api.Controllers.GameController.UpdateGame(System.Guid,game.api.Models.InputModel.GameInputModel)">
+            <summary>Update a game</summary>
+            <remarks>Enter the ID of the game to be updated and the game data</remarks>
+            <param name="idGame">Game ID to be updated</param>
+            <response code="200">successfully updated</response>
+            <response code="400">Game not found to update</response>
+        </member>
+        <member name="M:game.api.Controllers.GameController.DeleteGame(System.Guid)">
+            <summary>Delete a game</summary>
+            <remarks>Enter the ID of the game to be deleted</remarks>
+            <param name="idGame">Game ID to be deleted</param>
+            <response code="200">successfully deleted</response>
+            <response code="400">Game not found to delete</response>
+        </member>
+    </members>
+</doc>
