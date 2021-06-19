@@ -6,7 +6,7 @@
 Api de cadastro de jogos desenvolvida com ASP.NET Core 5.0 e MS SQL Server. 
 Esse projeto foi criado no Bootcampo Takeblip com a plataforma da Digital Innovation One.
 
-![endpoints image](./Images/api-1.png)
+<img src="./Images/api-1.png" width="800px"/>
 
 ## Foi utilizado neste projeto:
  * Camada de Entidade;
